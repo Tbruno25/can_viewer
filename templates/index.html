@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block data_table %}
+
+<script>
+    var is_on = true;
+    var paused = function (bool) {
+        is_on = bool;
+    };
+
+    var new_id = function (id) {
+        return "<tr>" +
+            "<td>" + id + "</td>" +
+            "<td id=\"" + id + "_dlc\"></td>" +
+            "<td id=\"" + id + "_data\"></td>" +
+            "</tr>"
+    };
+
+    var update_id = function (id, dlc, data) {
+        document.getElementById(id + "_dlc").innerHTML = dlc;
+        document.getElementById(id + "_data").innerHTML = data;
+    };
+
+    var source = new EventSource('/stream');
+    source.onmessage = function (event) {
+        if (is_on == true) {
+            var msg = JSON.parse(event.data);
+            if (msg.new_id == true) {
+                $("#app-table tbody").append(new_id(msg.id));
+            }
+            else {
+                update_id(msg.id, msg.dlc, msg.data);
+            }
+        }
+    }
+</script>
+
+{% endblock data_table %}

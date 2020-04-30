@@ -1,0 +1,37 @@
+
+html, body {
+    height: 100%
+  }
+
+  .container { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+
+.row {
+    background:linear-gradient(#e66465, #9198e5);
+    border-radius:10px !important;
+    width: 500px;
+    align-items: center;
+}
+
+.btn-group-vertical > button {
+    background:white;
+    margin:10px;
+    border-radius:5px !important;
+}
+
+#app-table {
+    width: 330px;
+    max-height: 500px;
+    overflow-y: auto;
+    display: inline-block;
+    margin: 10px;
+    background: white;
+    text-align: left;
+    border-radius:5px !important;
+}
