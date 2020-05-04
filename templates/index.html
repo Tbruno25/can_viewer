@@ -1,37 +1,48 @@
 {% extends "layout.html" %}
-{% block data_table %}
+{% block data %}
 
 <script>
-    var is_on = true;
-    var paused = function (bool) {
-        is_on = bool;
+    const table = document.getElementById("data-table");
+
+    function add_row(msg) {
+        row = table.insertRow(),
+        cell1 = row.insertCell(0),
+        cell2 = row.insertCell(1);
+        cell3 = row.insertCell(2);
+
+        cell2.id = msg.id + "dlc";
+        cell3.id = msg.id + "bytes";
+
+        cell1.innerHTML = msg.id;
+        cell2.innerHTML = msg.dlc;
+        cell3.innerHTML = msg.bytes;
     };
 
-    var new_id = function (id) {
-        return "<tr>" +
-            "<td>" + id + "</td>" +
-            "<td id=\"" + id + "_dlc\"></td>" +
-            "<td id=\"" + id + "_data\"></td>" +
-            "</tr>"
-    };
 
-    var update_id = function (id, dlc, data) {
-        document.getElementById(id + "_dlc").innerHTML = dlc;
-        document.getElementById(id + "_data").innerHTML = data;
-    };
+    function pause(bool) {
+        if (bool == true) {
+            source.close();
+        }
 
-    var source = new EventSource('/stream');
-    source.onmessage = function (event) {
-        if (is_on == true) {
-            var msg = JSON.parse(event.data);
-            if (msg.new_id == true) {
-                $("#app-table tbody").append(new_id(msg.id));
-            }
-            else {
-                update_id(msg.id, msg.dlc, msg.data);
-            }
+        if (bool == false) {
+            source = new EventSource('/stream');
+            
+            source.addEventListener('new_id', function handle_new_id(event) {
+                var dict = JSON.parse(event.data);
+                $("#data-table td").remove();
+                for (var msg in dict) {
+                    add_row(dict[msg]);
+                }
+            });
+
+            source.addEventListener('update', function handle_update(event) {
+                var msg = JSON.parse(event.data);
+                document.getElementById(msg.id + "dlc").innerHTML = msg.dlc;
+                document.getElementById(msg.id + "bytes").innerHTML = msg.bytes;
+            });
         }
     }
+
 </script>
 
-{% endblock data_table %}
+{% endblock data %}

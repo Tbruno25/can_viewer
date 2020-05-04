@@ -21,17 +21,17 @@
         <div class="row">
             <div class="col-">
                 <div class="btn-group-vertical">
-                    <button type="button" onclick="paused(true)" class="btn btn-outline-success">
+                    <button type="button" onclick="pause(false)" class="btn btn-outline-success">
                         Stream
                     </button>
-                    <button type="button" onclick="paused(false)" class="btn btn-outline-danger">
+                    <button type="button" onclick="pause(true)" class="btn btn-outline-danger">
                         Pause
                     </button>
                 </div>
             </div>
 
             <div class="col-5">
-                <table class="table table-hover" id="app-table">
+                <table class="table table-hover" id="data-table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
 
-                        {% block data_table %}
+                        {% block data %}
                         {% endblock %}
 
                     </tbody>
