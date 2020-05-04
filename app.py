@@ -7,22 +7,23 @@ app = Flask(__name__)
 
 
 def event_stream():
-    dic = {}
+    data_dic = {}
     while True:
 
-        time.sleep(0.025)
+        time.sleep(0.005)
         # Simulate random CAN msg
         id, dlc = randint(100, 120), randint(1, 8)
-        data = " ".join([str(randint(20, 80)) for _ in range(dlc)])
+        bytes = " ".join([str(randint(20, 80)) for _ in range(dlc)])
 
-        msg = {"id": id, "dlc": dlc, "data": data, "new_id": False}
+        event = "update"
+        msg = {"id": id, "dlc": dlc, "bytes": bytes}
 
-        if not dic.get(id):
-            dic[id] = True
-            msg["new_id"] = True
+        if not data_dic.get(id):
+            event = "new_id"
 
-        obj = json.dumps(msg)
-        yield f"data:{obj}\n\n"
+        data_dic[id] = msg
+        data = json.dumps(msg) if event == "update" else json.dumps(data_dic)
+        yield f"event:{event}\ndata:{data}\n\n"
 
 
 @app.route("/")

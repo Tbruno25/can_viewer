@@ -25,7 +25,7 @@ html, body {
     border-radius:5px !important;
 }
 
-#app-table {
+#data-table {
     width: 330px;
     max-height: 500px;
     overflow-y: auto;
